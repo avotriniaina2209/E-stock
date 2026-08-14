@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Stock Future - Tableau de Bord</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="styles/dashboard.css">
+</head>
+<body>
+    <div class="ctn-tbd">
+        <!-- Sidebar -->
+        <aside class="brt-lt" id="brt-lt">
+            <div class="log-sec">
+                <div class="log-ico">E-S</div>
+                <h1 class="log-txt">E-Stock</h1>
+            </div>
+
+            <nav class="nav-pcp">
+                <button class="nav-itm actf" onclick="navAller('tbd')">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Tableau de Bord</span>
+                </button>
+                <button class="nav-itm" onclick="navAller('fch')">
+                    <i class="fas fa-file"></i>
+                    <span>Mes Fichiers</span>
+                </button>
+                <button class="nav-itm" onclick="navAller('fav')">
+                    <i class="fas fa-star"></i>
+                    <span>Favoris</span>
+                </button>
+                <button class="nav-itm" onclick="navAller('prt')">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Partagés</span>
+                </button>
+            </nav>
+
+            <div class="stk-sec">
+                <h3 class="stk-ttl">Stockage</h3>
+                <div class="stk-brr">
+                    <div class="stk-rpl" id="stk-rpl"></div>
+                </div>
+                <p class="stk-txt"><span id="stk-utl">0</span> GB / <span id="stk-max">50</span> GB</p>
+            </div>
+
+            <div class="nav-pcp" style="margin-top: auto;">
+                <button class="nav-itm" onclick="navAller('prm')">
+                    <i class="fas fa-cog"></i>
+                    <span>Paramètres</span>
+                </button>
+                <button class="nav-itm" onclick="dco()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Déconnexion</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Contenu principal -->
+        <main class="ctn-pcp">
+            <!-- Barre supérieure -->
+            <div class="brr-sup">
+                <button class="btn-bsc" onclick="bscBrt()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2 class="ttl-pg" id="ttl-pg">Tableau de Bord</h2>
+                <div class="usr-sec">
+                    <span id="usr-nm">Utilisateur</span>
+                    <img src="https://via.placeholder.com/40" alt="Avatar" class="avt-usr">
+                </div>
+            </div>
+
+            <!-- Contenu des pages -->
+            <div class="ctn-pg">
+                <!-- Tableau de Bord -->
+                <div id="pg-tbd" class="pg actf">
+                    <div class="grd-tbd">
+                        <!-- Cartes statistiques -->
+                        <div class="crt-stt">
+                            <div class="crt-ico" style="background: rgba(26, 86, 224, 0.1);">
+                                <i class="fas fa-file" style="color: #1a56e0;"></i>
+                            </div>
+                            <div class="crt-inf">
+                                <h3>Fichiers</h3>
+                                <p id="stt-fch">0</p>
+                            </div>
+                        </div>
+
+                        <div class="crt-stt">
+                            <div class="crt-ico" style="background: rgba(224, 32, 32, 0.1);">
+                                <i class="fas fa-image" style="color: #e02020;"></i>
+                            </div>
+                            <div class="crt-inf">
+                                <h3>Images</h3>
+                                <p id="stt-img">0</p>
+                            </div>
+                        </div>
+
+                        <div class="crt-stt">
+                            <div class="crt-ico" style="background: rgba(26, 86, 224, 0.1);">
+                                <i class="fas fa-video" style="color: #1a56e0;"></i>
+                            </div>
+                            <div class="crt-inf">
+                                <h3>Vidéos</h3>
+                                <p id="stt-vid">0</p>
+                            </div>
+                        </div>
+
+                        <div class="crt-stt">
+                            <div class="crt-ico" style="background: rgba(224, 32, 32, 0.1);">
+                                <i class="fas fa-code" style="color: #e02020;"></i>
+                            </div>
+                            <div class="crt-inf">
+                                <h3>Code</h3>
+                                <p id="stt-cod">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Graphiques -->
+                    <div class="grf-sec">
+                        <div class="grf-crt">
+                            <h3>Répartition par Type</h3>
+                            <canvas id="grfTyp"></canvas>
+                        </div>
+
+                        <div class="grf-crt">
+                            <h3>Taille par Type (MB)</h3>
+                            <canvas id="grfTll"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Fichiers récents -->
+                    <div class="fch-rec">
+                        <h3>Fichiers Récents</h3>
+                        <div id="lst-rec" class="lst-fch"></div>
+                    </div>
+                </div>
+
+                <!-- Mes Fichiers -->
+                <div id="pg-fch" class="pg">
+                    <div class="brt-fch">
+                        <div class="rch-sec">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="rch-fch" placeholder="Rechercher..." onkeyup="rchFch()">
+                        </div>
+                        <select id="tri-fch" onchange="triFch()">
+                            <option value="date">Trier par date</option>
+                            <option value="nom">Trier par nom</option>
+                            <option value="taille">Trier par taille</option>
+                        </select>
+                        <button class="btn-prm btn-import" onclick="document.getElementById('inp-fch').click()"><i class="fas fa-upload"></i> Importer</button>
+                        <button class="btn-prm btn-dos" onclick="creerDossier()"><i class="fas fa-folder-plus"></i> Dossier</button>
+                        <input id="inp-fch" type="file" multiple hidden onchange="importerFichiers(event)">
+                    </div>
+                    <div id="lst-fch" class="lst-fch"></div>
+                </div>
+
+                <!-- Favoris -->
+                <div id="pg-fav" class="pg">
+                    <div id="lst-fav" class="lst-fch"></div>
+                </div>
+
+                <!-- Partagés -->
+                <div id="pg-prt" class="pg">
+                    <p style="text-align: center; color: rgba(255, 255, 255, 0.5); padding: 40px;">
+                        Aucun fichier partagé pour le moment
+                    </p>
+                </div>
+
+                <!-- Paramètres -->
+                <div id="pg-prm" class="pg">
+                    <div class="prm-sec">
+                        <h3>Profil</h3>
+                        <div class="prm-grp">
+                            <label>Nom</label>
+                            <input type="text" id="prm-nom" placeholder="Votre nom">
+                        </div>
+                        <div class="prm-grp">
+                            <label>Email</label>
+                            <input type="email" id="prm-eml" placeholder="Votre email" disabled>
+                        </div>
+                        <button class="btn-prm">Enregistrer</button>
+                    </div>
+
+                    <div class="prm-sec">
+                        <h3>Thème</h3>
+                        <div class="prm-thm">
+                            <button class="thm-btn actf" onclick="chgThm('sombre')">
+                                <i class="fas fa-moon"></i>
+                                Sombre
+                            </button>
+                            <button class="thm-btn" onclick="chgThm('clair')">
+                                <i class="fas fa-sun"></i>
+                                Clair
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
